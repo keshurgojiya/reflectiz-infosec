@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You Won! | Reflectiz × Infosecurity Europe</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(122.88deg, #103A77 26.52%, #FF6C87 115.97%);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Centered content block ── */
+    .page-center {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 28px;
+      padding: 40px 24px;
+    }
+
+    /* ── Logo header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* ── Two-column row ── */
+    .content {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+
+    /* ── Left column ── */
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 460px;
+    }
+
+    .won-heading {
+      font-size: clamp(52px, 7vw, 80px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+    .won-sub {
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      margin-top: -6px;
+    }
+
+    /* ── Form wrapper ── */
+    .form-wrap {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      padding: 24px 24px 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .form-field { display: flex; flex-direction: column; }
+    .form-field + .form-field { margin-top: 12px; }
+    .form-field input {
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.93);
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #1a1a2e;
+      outline: none;
+      width: 100%;
+      font-family: inherit;
+      transition: box-shadow 0.15s;
+    }
+    .form-field input:focus {
+      box-shadow: 0 0 0 3px rgba(116,255,155,0.45);
+    }
+    .form-field input::placeholder { color: #9098b8; }
+
+    .btn-claim {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: #74ff9b;
+      color: #103a77;
+      font-weight: 800;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 16px;
+      letter-spacing: 0.3px;
+      transition: filter 0.15s, transform 0.1s;
+    }
+    .btn-claim:hover  { filter: brightness(1.08); }
+    .btn-claim:active { transform: scale(0.98); }
+
+    .privacy-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    /* ── Right column — monster ── */
+    .right {
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-end;
+    }
+    .right img {
+      height: 480px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* ── Transition overlay ── */
+    .overlay {
+      position: fixed; inset: 0;
+      background: #0d1545;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.6s ease;
+      z-index: 200;
+    }
+    .overlay.active { opacity: 1; pointer-events: all; }
+
+    @media (max-width: 860px) {
+      .page-center { padding: 24px 20px; gap: 20px; }
+      .content { flex-direction: column; gap: 24px; }
+      .left { width: 100%; }
+      .right { display: flex; justify-content: center; }
+      .right img { height: 280px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-center">
+    <header class="header">
+      <img src="./assets/logos.svg" alt="Reflectiz × Infosecurity Europe" height="36">
+    </header>
+
+    <div class="content">
+      <div class="left">
+        <div>
+          <h1 class="won-heading">YOU WON!</h1>
+          <p class="won-sub">Get your prize!</p>
+        </div>
+
+        <div class="form-wrap">
+          <form id="prize-form" novalidate>
+            <div class="form-row">
+              <div class="form-field">
+                <input type="text" name="firstname" placeholder="First name" required>
+              </div>
+              <div class="form-field">
+                <input type="text" name="lastname" placeholder="Last name" required>
+              </div>
+            </div>
+            <div class="form-field" style="margin-top:12px">
+              <input type="email" name="email" placeholder="Email address" required>
+            </div>
+            <div class="form-field" style="margin-top:12px">
+              <input type="text" name="company" placeholder="company name">
+            </div>
+            <div class="form-field" style="margin-top:12px">
+              <input type="text" name="jobtitle" placeholder="Job title">
+            </div>
+            <button type="submit" class="btn-claim">Claim my prize</button>
+          </form>
+
+          <p class="privacy-note">
+            Your contact details are for Reflectiz use only.<br>
+            We will not sell, rent, or share your information with third parties.
+          </p>
+        </div>
+      </div>
+
+      <div class="right">
+        <img src="./assets/Monster2.png" alt="">
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const prize  = params.get('prize') || 'duck';
+    const token  = params.get('token') || '';
+
+    function goToPrizePage() {
+      document.getElementById('overlay').classList.add('active');
+      setTimeout(() => {
+        window.location.href = `prize-${prize}.html?token=${encodeURIComponent(token)}&prize=${encodeURIComponent(prize)}`;
+      }, 650);
+    }
+
+    document.getElementById('prize-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let valid = true;
+      this.querySelectorAll('[required]').forEach(el => {
+        if (!el.value.trim()) {
+          el.style.boxShadow = '0 0 0 3px rgba(255,80,80,0.5)';
+          valid = false;
+        } else {
+          el.style.boxShadow = '';
+        }
+      });
+      if (valid) goToPrizePage();
+    });
+  </script>
+</body>
+</html>

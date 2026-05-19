@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prize Reserved – Cool Socks | Reflectiz</title>
+  <script src="./assets/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(122.88deg, #103A77 26.52%, #FF6C87 115.97%);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-center {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 28px;
+      padding: 40px 24px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .content {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .reserved-heading {
+      font-size: clamp(44px, 6vw, 68px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -1px;
+    }
+
+    .prize-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 440px;
+    }
+
+    .prize-info { flex: 1; }
+    .prize-label {
+      font-size: 13px; color: #6b7280; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+    }
+    .prize-name {
+      font-size: clamp(22px, 3vw, 28px); font-weight: 900;
+      color: #1c2875; line-height: 1.2; margin-bottom: 16px;
+    }
+    .booth-note { font-size: 13px; font-weight: 600; color: #374151; line-height: 1.5; }
+
+    .qr-wrap { flex-shrink: 0; }
+    #qrcode canvas, #qrcode img { border-radius: 8px; display: block; }
+    .qr-fallback {
+      width: 130px; height: 130px;
+      border: 2px dashed #d1d5db; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #9ca3af; font-size: 11px; text-align: center; padding: 10px;
+    }
+
+    .prize-img-mobile { display: none; }
+
+    .right {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .right img {
+      height: 420px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.35));
+    }
+
+    @media (max-width: 860px) {
+      body { align-items: flex-start; }
+      .page-center { padding: 24px 16px; gap: 20px; width: 100%; }
+      .content { flex-direction: column; gap: 0; width: 100%; }
+      .left { width: 100%; gap: 16px; }
+      .reserved-heading { font-size: 36px; }
+
+      .prize-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-width: 100%;
+        padding: 24px 20px 28px;
+        gap: 0;
+        border-radius: 16px;
+      }
+      .prize-label { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+      .prize-name { font-size: 32px; margin-bottom: 12px; }
+      .booth-note { font-size: 14px; margin-bottom: 20px; }
+
+      .qr-wrap { width: 100%; display: flex; justify-content: center; margin-bottom: 24px; }
+      #qrcode canvas, #qrcode img { width: 100% !important; height: auto !important; max-width: 260px; }
+
+      .prize-img-mobile {
+        display: block;
+        width: 180px;
+        height: auto;
+        margin: 0 auto;
+      }
+
+      .right { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-center">
+    <header class="header">
+      <img src="./assets/logos.svg" alt="Reflectiz × Infosecurity Europe" height="36">
+    </header>
+
+    <div class="content">
+      <div class="left">
+        <h1 class="reserved-heading">Prize reserved!</h1>
+        <div class="prize-card">
+          <div class="prize-info">
+            <p class="prize-label">Your prize:</p>
+            <p class="prize-name">Cool socks</p>
+            <p class="booth-note">Bring this QR code to Booth F115 to collect your prize</p>
+          </div>
+          <div class="qr-wrap">
+            <div id="qrcode"></div>
+          </div>
+          <img class="prize-img-mobile" src="./assets/prize-socks.svg" alt="Cool Socks">
+        </div>
+      </div>
+
+      <div class="right">
+        <img src="./assets/prize-socks.svg" alt="Cool Socks">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params     = new URLSearchParams(window.location.search);
+    const token      = params.get('token') || 'demo';
+    const BASE_URL   = 'https://www.reflectiz.com/infosec2026';
+    const checkinURL = `${BASE_URL}/checkin?token=${encodeURIComponent(token)}`;
+    const isMobile   = window.innerWidth <= 860;
+    const qrSize     = isMobile ? 240 : 130;
+
+    try {
+      new QRCode(document.getElementById('qrcode'), {
+        text: checkinURL, width: qrSize, height: qrSize,
+        colorDark: '#1c2875', colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } catch(e) {
+      document.getElementById('qrcode').innerHTML =
+        `<div class="qr-fallback">QR code<br>token: ${token}</div>`;
+    }
+  </script>
+</body>
+</html>
