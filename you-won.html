@@ -392,9 +392,11 @@
           portalId: '3823784',
           formId: '47dcccb0-b397-4abb-89d8-07519a3bca85',
           target: '#hubspot-form',
+          onFormReady: function() {
+            document.getElementById('fallback-form-wrap').style.display = 'none';
+          },
           onFormSubmitted: function() { goToPrizePage(); }
         });
-        document.getElementById('fallback-form-wrap').style.display = 'none';
       };
       document.body.appendChild(hs);
     }
