@@ -215,17 +215,17 @@
       padding: 0px 0px 20px 0px;
     }
 
-    /* ── Full-screen background animation ── */
+    /* ── Full-screen celebration animation (plays once on load, then fades out) ── */
     #lottie-bg {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
+      z-index: 100;
+      transition: opacity 0.8s ease;
     }
     #lottie-bg svg { width: 100% !important; height: 100% !important; }
 
-    /* ── Page content above animation ── */
     .page-wrap { position: relative; z-index: 1; }
 
     /* ── Transition overlay ── */
@@ -359,14 +359,21 @@
       : './assets/coockie animation desktop.json';
 
     try {
-      lottie.loadAnimation({
+      var bgAnim = lottie.loadAnimation({
         container: document.getElementById('lottie-bg'),
         renderer: 'svg',
-        loop: true,
+        loop: false,
         autoplay: true,
         path: animFile
       });
-    } catch (e) {}
+      bgAnim.addEventListener('complete', function() {
+        var el = document.getElementById('lottie-bg');
+        el.style.opacity = '0';
+        el.style.pointerEvents = 'none';
+      });
+    } catch (e) {
+      document.getElementById('lottie-bg').style.display = 'none';
+    }
 
     // ── HubSpot form ──────────────────────────────────────────────────────────
     function showFallback() {
