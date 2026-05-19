@@ -393,6 +393,8 @@
           target: '#hubspot-form',
           onFormReady: function() {
             document.getElementById('fallback-form-wrap').style.display = 'none';
+            var btn = document.querySelector('#hubspot-form input[type="submit"], #hubspot-form .hs-button');
+            if (btn) btn.value = 'Claim my prize';
           },
           onFormSubmitted: function() { goToPrizePage(); }
         });
