@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>You Won! | Reflectiz × Infosecurity Europe</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -17,87 +18,159 @@
       justify-content: center;
     }
 
-    /* ── Centered content block ── */
-    .page-center {
+    /* ── Page wrapper ── */
+    .page-wrap {
+      width: 100%;
+      max-width: 1200px;
+      padding: 48px 80px;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
       gap: 28px;
-      padding: 40px 24px;
     }
 
-    /* ── Logo header ── */
-    .header {
+    /* ── Logo ── */
+    .logo {
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo img { height: 68px; width: auto; display: block; }
+
+    /* ── Main two-column row ── */
+    .main-row {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 40px;
     }
 
-    /* ── Two-column row ── */
-    .content {
-      display: flex;
-      align-items: center;
-      gap: 60px;
-    }
-
-    /* ── Left column ── */
+    /* ── Left column: heading + form ── */
     .left {
+      flex: 0 0 480px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      width: 460px;
+      gap: 24px;
     }
 
     .won-heading {
-      font-size: clamp(52px, 7vw, 80px);
+      font-size: 86px;
       font-weight: 900;
-      line-height: 1;
-      letter-spacing: -1px;
+      line-height: 0.95;
+      letter-spacing: -2px;
+      text-align: center;
     }
+
     .won-sub {
-      font-size: clamp(18px, 2.5vw, 24px);
+      font-size: 24px;
       font-weight: 700;
-      color: rgba(255,255,255,0.85);
-      margin-top: -6px;
+      margin-top: 4px;
+      text-align: center;
     }
 
-    /* ── Form wrapper ── */
-    .form-wrap {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 16px;
-      padding: 24px 24px 16px;
-      backdrop-filter: blur(10px);
+    /* ── Form fields ── */
+    .form-area {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
     }
 
-    .form-row {
+    /* ── HubSpot overrides ── */
+    #hubspot-form .hs-form { width: 100% !important; }
+    #hubspot-form .hs-form fieldset { max-width: 100% !important; }
+
+    #hubspot-form .hs-form fieldset.form-columns-2 {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 10px !important;
+    }
+    #hubspot-form .hs-form fieldset.form-columns-2 .hs-form-field {
+      width: 100% !important;
+    }
+    #hubspot-form .hs-form .hs-form-field { margin-bottom: 10px !important; }
+    #hubspot-form .hs-form label { display: none !important; }
+    #hubspot-form .hs-form .input { margin-right: 0 !important; }
+
+    #hubspot-form .hs-form .hs-input {
+      width: 100% !important;
+      padding: 14px 16px !important;
+      background: #fff !important;
+      border: none !important;
+      border-radius: 6px !important;
+      font-size: 14px !important;
+      color: #1a1a2e !important;
+      font-family: inherit !important;
+      outline: none !important;
+      box-shadow: none !important;
+      transition: box-shadow 0.15s !important;
+      height: auto !important;
+    }
+    #hubspot-form .hs-form .hs-input:focus {
+      box-shadow: 0 0 0 3px rgba(116,255,155,0.5) !important;
+    }
+    #hubspot-form .hs-form .hs-input::placeholder { color: #aab0c8 !important; }
+
+    #hubspot-form .hs-form .hs-error-msgs {
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 4px 0 0 !important;
+    }
+    #hubspot-form .hs-form .hs-error-msgs li label {
+      display: block !important;
+      color: #ff9999 !important;
+      font-size: 11px !important;
+    }
+
+    #hubspot-form .hs-form .hs-button {
+      display: block !important;
+      width: 100% !important;
+      padding: 16px !important;
+      background: #74ff9b !important;
+      color: #103a77 !important;
+      font-weight: 800 !important;
+      font-size: 16px !important;
+      border: none !important;
+      border-radius: 6px !important;
+      cursor: pointer !important;
+      margin-top: 4px !important;
+      font-family: inherit !important;
+      letter-spacing: 0.2px !important;
+      transition: filter 0.15s, transform 0.1s !important;
+    }
+    #hubspot-form .hs-form .hs-button:hover  { filter: brightness(1.08) !important; }
+    #hubspot-form .hs-form .hs-button:active { transform: scale(0.98) !important; }
+    #hubspot-form .legal-consent-container { display: none !important; }
+
+    /* ── Fallback form (local preview only) ── */
+    #fallback-form-wrap {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .fb-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
     }
-    .form-field { display: flex; flex-direction: column; }
-    .form-field + .form-field { margin-top: 12px; }
-    .form-field input {
-      padding: 14px 18px;
-      background: rgba(255,255,255,0.93);
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      color: #1a1a2e;
-      outline: none;
+    #fallback-form-wrap input {
       width: 100%;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid #BAC3F0;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #1a1a2e;
       font-family: inherit;
+      outline: none;
       transition: box-shadow 0.15s;
     }
-    .form-field input:focus {
-      box-shadow: 0 0 0 3px rgba(116,255,155,0.45);
+    #fallback-form-wrap input:focus {
+      box-shadow: 0 0 0 3px rgba(116,255,155,0.5);
     }
-    .form-field input::placeholder { color: #9098b8; }
+    #fallback-form-wrap input::placeholder { color: #BAC3F0; }
 
     .btn-claim {
-      display: block;
       width: 100%;
-      padding: 16px;
+      padding: 8px;
       background: #74ff9b;
       color: #103a77;
       font-weight: 800;
@@ -105,33 +178,32 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      margin-top: 16px;
-      letter-spacing: 0.3px;
+      font-family: inherit;
+      letter-spacing: 0.2px;
       transition: filter 0.15s, transform 0.1s;
+      margin: 8px 0px;
     }
     .btn-claim:hover  { filter: brightness(1.08); }
     .btn-claim:active { transform: scale(0.98); }
 
+    /* ── Privacy note ── */
     .privacy-note {
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
+      font-size: 15px;
+      color: #ffffff;
       text-align: center;
-      line-height: 1.6;
-      margin-top: 12px;
+      line-height: 1.2;
+      padding: 0px 0px 20px 0px;
     }
 
-    /* ── Right column — monster ── */
+    /* ── Right column: animation ── */
     .right {
-      flex-shrink: 0;
+      flex: 1;
       display: flex;
       align-items: flex-end;
+      justify-content: center;
     }
-    .right img {
-      height: 480px;
-      width: auto;
-      object-fit: contain;
-      display: block;
-    }
+    #lottie-anim { width: 460px; height: 460px; }
+    .monster-fallback { height: 420px; width: auto; object-fit: contain; display: none; }
 
     /* ── Transition overlay ── */
     .overlay {
@@ -143,92 +215,165 @@
     }
     .overlay.active { opacity: 1; pointer-events: all; }
 
+    /* ── Mobile ── */
     @media (max-width: 860px) {
-      .page-center { padding: 24px 20px; gap: 20px; }
-      .content { flex-direction: column; gap: 24px; }
-      .left { width: 100%; }
-      .right { display: flex; justify-content: center; }
-      .right img { height: 280px; }
-      .form-row { grid-template-columns: 1fr; }
+      body { align-items: flex-start; }
+
+      .page-wrap {
+        padding: 28px 20px 40px;
+        gap: 20px;
+      }
+
+      .main-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+
+      .left {
+        flex: none;
+        width: 100%;
+        gap: 16px;
+      }
+
+      .won-heading { font-size: 58px; letter-spacing: -1px; }
+      .won-sub { font-size: 20px; }
+
+      .fb-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+      #hubspot-form .hs-form fieldset.form-columns-2 {
+        grid-template-columns: 1fr 1fr !important;
+      }
+
+      .right {
+        width: 100%;
+        justify-content: center;
+      }
+
+      #lottie-anim { width: 260px; height: 260px; }
+      .monster-fallback { height: 350px; }
+
+      .privacy-note {
+      font-size: 15px;
+        padding: 20px 0px 20px 0px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="page-center">
-    <header class="header">
-      <img src="./assets/logos.svg" alt="Reflectiz × Infosecurity Europe" height="36">
-    </header>
+  <div class="page-wrap">
 
-    <div class="content">
+    <div class="main-row">
+
+      <!-- Left: heading + form -->
       <div class="left">
-        <div>
-          <h1 class="won-heading">YOU WON!</h1>
-          <p class="won-sub">Get your prize!</p>
+        <div class="logo">
+          <img src="./assets/logos.svg" alt="Reflectiz × Infosecurity Europe">
+        </div>
+        <h1 class="won-heading">YOU WON!</h1>
+        <p class="won-sub">Get your prize!</p>
+
+        <div class="form-area">
+          <!-- HubSpot injects here when live -->
+          <div id="hubspot-form"></div>
+
+          <!-- Shown only when HubSpot fails (local file:// preview) -->
+          <div id="fallback-form-wrap">
+            <div class="fb-row">
+              <input type="text" placeholder="First name">
+              <input type="text" placeholder="Last name">
+            </div>
+            <input type="email" placeholder="Email address">
+            <input type="text" placeholder="Company name">
+            <input type="text" placeholder="Job title">
+            <button class="btn-claim" id="fallback-btn">Claim my prize</button>
+          </div>
         </div>
 
-        <div class="form-wrap">
-          <form id="prize-form" novalidate>
-            <div class="form-row">
-              <div class="form-field">
-                <input type="text" name="firstname" placeholder="First name" required>
-              </div>
-              <div class="form-field">
-                <input type="text" name="lastname" placeholder="Last name" required>
-              </div>
-            </div>
-            <div class="form-field" style="margin-top:12px">
-              <input type="email" name="email" placeholder="Email address" required>
-            </div>
-            <div class="form-field" style="margin-top:12px">
-              <input type="text" name="company" placeholder="company name">
-            </div>
-            <div class="form-field" style="margin-top:12px">
-              <input type="text" name="jobtitle" placeholder="Job title">
-            </div>
-            <button type="submit" class="btn-claim">Claim my prize</button>
-          </form>
-
-          <p class="privacy-note">
-            Your contact details are for Reflectiz use only.<br>
-            We will not sell, rent, or share your information with third parties.
-          </p>
-        </div>
+        <p class="privacy-note">
+          Your contact details are for Reflectiz use only. <br> We will not sell, rent, or share your information with third parties
+        </p>
       </div>
 
+      <!-- Right: Lottie cookie animation -->
       <div class="right">
-        <img src="./assets/Monster2.png" alt="">
+        <div id="lottie-anim"></div>
+        <img class="monster-fallback" id="monster-img" src="./assets/prize-socks.svg" alt="">
       </div>
+
     </div>
   </div>
 
   <div class="overlay" id="overlay"></div>
 
   <script>
+    // ── Prize routing ──────────────────────────────────────────────────────────
     const params = new URLSearchParams(window.location.search);
     const prize  = params.get('prize') || 'duck';
     const token  = params.get('token') || '';
 
     function goToPrizePage() {
       document.getElementById('overlay').classList.add('active');
-      setTimeout(() => {
-        window.location.href = `prize-${prize}.html?token=${encodeURIComponent(token)}&prize=${encodeURIComponent(prize)}`;
+      setTimeout(function() {
+        window.location.href =
+          'prize-' + prize + '.html?token=' + encodeURIComponent(token) +
+          '&prize=' + encodeURIComponent(prize);
       }, 650);
     }
 
-    document.getElementById('prize-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      let valid = true;
-      this.querySelectorAll('[required]').forEach(el => {
-        if (!el.value.trim()) {
-          el.style.boxShadow = '0 0 0 3px rgba(255,80,80,0.5)';
-          valid = false;
-        } else {
-          el.style.boxShadow = '';
-        }
-      });
-      if (valid) goToPrizePage();
+    // ── Fallback form submit ───────────────────────────────────────────────────
+    document.getElementById('fallback-btn').addEventListener('click', goToPrizePage);
+
+    // ── Lottie animation ───────────────────────────────────────────────────────
+    var isMobile = window.innerWidth <= 860;
+    var animFile = isMobile
+      ? './assets/coockie animation mobile.json'
+      : './assets/coockie animation desktop (1).json';
+
+    var anim = lottie.loadAnimation({
+      container: document.getElementById('lottie-anim'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: animFile
     });
+
+    anim.addEventListener('data_failed', function() {
+      document.getElementById('lottie-anim').style.display = 'none';
+      document.getElementById('monster-img').style.display = 'block';
+    });
+
+    // ── HubSpot form ──────────────────────────────────────────────────────────
+    function showFallback() {
+      document.getElementById('hubspot-form').style.display = 'none';
+      document.getElementById('fallback-form-wrap').style.display = 'flex';
+    }
+
+    function loadHubSpotForm() {
+      var hs = document.createElement('script');
+      hs.charset = 'utf-8';
+      hs.type = 'text/javascript';
+      hs.src = '//js.hsforms.net/forms/embed/v2.js';
+      hs.onload = function() {
+        hbspt.forms.create({
+          region: 'na1',
+          portalId: '3823784',
+          formId: '47dcccb0-b397-4abb-89d8-07519a3bca85',
+          target: '#hubspot-form',
+          onFormSubmitted: function() { goToPrizePage(); }
+        });
+        document.getElementById('fallback-form-wrap').style.display = 'none';
+      };
+      hs.onerror = showFallback;
+      document.body.appendChild(hs);
+
+      setTimeout(function() {
+        if (!document.querySelector('#hubspot-form .hs-form')) showFallback();
+      }, 4000);
+    }
+
+    loadHubSpotForm();
   </script>
+
 </body>
 </html>
