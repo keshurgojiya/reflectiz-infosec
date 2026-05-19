@@ -223,6 +223,7 @@
       height: 100%;
       z-index: 100;
       transition: opacity 0.8s ease;
+      pointer-events: none;
     }
     #lottie-bg svg { width: 100% !important; height: 100% !important; }
 
@@ -361,24 +362,22 @@
     document.getElementById('lottie-bg').style.opacity = '0';
 
     setTimeout(function() {
+      var el = document.getElementById('lottie-bg');
       try {
-        document.getElementById('lottie-bg').style.opacity = '1';
-        var bgAnim = lottie.loadAnimation({
-          container: document.getElementById('lottie-bg'),
+        el.style.opacity = '1';
+        lottie.loadAnimation({
+          container: el,
           renderer: 'svg',
           loop: false,
           autoplay: true,
           path: animFile
         });
-        bgAnim.addEventListener('complete', function() {
-          var el = document.getElementById('lottie-bg');
-          el.style.opacity = '0';
-          el.style.pointerEvents = 'none';
-        });
-      } catch (e) {
-        document.getElementById('lottie-bg').style.display = 'none';
-      }
-    }, 1000);
+      } catch (e) {}
+
+      setTimeout(function() {
+        el.style.opacity = '0';
+      }, 2000);
+    }, 300);
 
     // ── HubSpot form ──────────────────────────────────────────────────────────
     function loadHubSpotForm() {
