@@ -160,9 +160,9 @@
     #hubspot-form .legal-consent-container { display: none !important; }
     #hubspot-form .hs-form .hs-richtext { display: none !important; }
 
-    /* ── Fallback form (local preview only) ── */
+    /* ── Fallback form ── */
     #fallback-form-wrap {
-      display: none;
+      display: flex;
       flex-direction: column;
       gap: 16px;
     }
@@ -352,35 +352,35 @@
     // ── Fallback form submit ───────────────────────────────────────────────────
     document.getElementById('fallback-btn').addEventListener('click', goToPrizePage);
 
-    // ── Lottie full-screen background ─────────────────────────────────────────
+    // ── Lottie full-screen animation (1s delay, plays once, then fades out) ────
     var isMobile = window.innerWidth <= 860;
     var animFile = isMobile
       ? './assets/coockie animation mobile.json'
       : './assets/coockie animation desktop.json';
 
-    try {
-      var bgAnim = lottie.loadAnimation({
-        container: document.getElementById('lottie-bg'),
-        renderer: 'svg',
-        loop: false,
-        autoplay: true,
-        path: animFile
-      });
-      bgAnim.addEventListener('complete', function() {
-        var el = document.getElementById('lottie-bg');
-        el.style.opacity = '0';
-        el.style.pointerEvents = 'none';
-      });
-    } catch (e) {
-      document.getElementById('lottie-bg').style.display = 'none';
-    }
+    document.getElementById('lottie-bg').style.opacity = '0';
+
+    setTimeout(function() {
+      try {
+        document.getElementById('lottie-bg').style.opacity = '1';
+        var bgAnim = lottie.loadAnimation({
+          container: document.getElementById('lottie-bg'),
+          renderer: 'svg',
+          loop: false,
+          autoplay: true,
+          path: animFile
+        });
+        bgAnim.addEventListener('complete', function() {
+          var el = document.getElementById('lottie-bg');
+          el.style.opacity = '0';
+          el.style.pointerEvents = 'none';
+        });
+      } catch (e) {
+        document.getElementById('lottie-bg').style.display = 'none';
+      }
+    }, 1000);
 
     // ── HubSpot form ──────────────────────────────────────────────────────────
-    function showFallback() {
-      document.getElementById('hubspot-form').style.display = 'none';
-      document.getElementById('fallback-form-wrap').style.display = 'flex';
-    }
-
     function loadHubSpotForm() {
       var hs = document.createElement('script');
       hs.charset = 'utf-8';
@@ -396,12 +396,7 @@
         });
         document.getElementById('fallback-form-wrap').style.display = 'none';
       };
-      hs.onerror = showFallback;
       document.body.appendChild(hs);
-
-      setTimeout(function() {
-        if (!document.querySelector('#hubspot-form .hs-form')) showFallback();
-      }, 4000);
     }
 
     loadHubSpotForm();
