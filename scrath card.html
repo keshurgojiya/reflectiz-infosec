@@ -11,248 +11,214 @@
       min-height: 100vh;
       background: linear-gradient(122.88deg, #103A77 26.52%, #FF6C87 115.97%);
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      color: #fff;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       overflow: hidden;
     }
 
-    /* ── Centered content block (logo + composition + hint) ── */
-    .page-center {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 24px;
+    /* ── Mobile-only logo header ── */
+    .mobile-header {
+      display: none;
     }
+    .mobile-header img { height: 60px; width: auto; }
 
-    /* ── Logo header ── */
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    /* Composition: cookie left, monster overlapping from right */
-    .composition {
-      display: flex;
-      align-items: flex-end;
-    }
-
-    /* ── Scratch card ── */
-    .scratch-section {
+    /* ── Card container ── */
+    .card-wrap {
       position: relative;
-      z-index: 2;
-      flex-shrink: 0;
+      width: 100%;
+      max-width: 1100px;
     }
 
-    .scratch-wrapper {
-      position: relative;
-      width: 380px;
-      height: 380px;
-      border-radius: 50%;
-      cursor: crosshair;
-      box-shadow: 0 24px 70px rgba(0,0,0,0.5), 0 0 0 6px rgba(255,255,255,0.08);
-      flex-shrink: 0;
+    /* ── Background SVG image (desktop) ── */
+    .card-bg {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+      user-select: none;
     }
 
-    /* Reveal layer (gift / prize) */
+    /* ── Scratch zone (positioned over center of card) ── */
+    .scratch-zone {
+      position: absolute;
+      /* Cookie (334px) is centered in the 871px wide SVG card */
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      /* 334/871 = 38.35% of card width */
+      width: 38%;
+      aspect-ratio: 1 / 1;
+    }
+
+    /* ── Reveal layer (prize shown underneath cookie) ── */
     .reveal-layer {
       position: absolute;
       inset: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 35%, #5de873 0%, #29a83a 50%, #1a7a28 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       overflow: hidden;
+      top: 18%;
+      height: 100%;
     }
-    .reveal-layer .gift {
-      font-size: 90px;
-      line-height: 1;
-      animation: pulse 1.2s ease-in-out infinite;
-    }
-    .reveal-layer .reveal-text {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      color: #fff;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.06); }
+    .reveal-layer img {
+      width: 100%;
     }
 
-    /* Scratch canvas */
+    /* ── Canvas (cookie image drawn here, scratched away) ── */
     #scratch-canvas {
       position: absolute;
       inset: 0;
-      border-radius: 50%;
-      touch-action: none;
-    }
-
-    .scratch-hint {
-      font-size: 16px;
-      color: rgba(255,255,255,0.65);
-      text-align: center;
-      align-self: center;
-    }
-
-    /* ── Monster ── */
-    .monster-wrap {
-      flex-shrink: 0;
-      height: 452px;
-      margin-left: -100px;
-      z-index: 1;
-      display: flex;
-      align-items: flex-end;
-    }
-    .monster-wrap img {
+      width: 100%;
       height: 100%;
-      width: auto;
-      object-fit: contain;
-      display: block;
+      touch-action: none;
+      cursor: grab;
+      height: 100%;
+      top: 18%;
     }
 
-    /* ── Transition overlay ── */
-    .transition-overlay {
-      position: fixed;
-      inset: 0;
+    /* ── Page transition overlay ── */
+    .overlay {
+      position: fixed; inset: 0;
       background: #0d1545;
-      opacity: 0;
-      pointer-events: none;
+      opacity: 0; pointer-events: none;
       transition: opacity 0.6s ease;
       z-index: 100;
     }
-    .transition-overlay.active { opacity: 1; pointer-events: all; }
+    .overlay.active { opacity: 1; pointer-events: all; }
 
-    /* ── Responsive ── */
+    /* ── Mobile ── */
     @media (max-width: 768px) {
-      .page-center { align-items: center; gap: 20px; padding: 24px; }
-      .monster-wrap { display: none; }
-      .scratch-wrapper { width: 290px; height: 290px; }
+      body { justify-content: flex-start; padding-top: 30px; gap: 0; }
+
+      .mobile-header { display: block; }
+
+      /* Hide desktop card background on mobile */
+      .card-bg { display: none; }
+
+      /* On mobile: scratch zone becomes a standalone element */
+      .card-wrap {
+        width: auto;
+        max-width: none;
+      }
+      .scratch-zone {
+        position: static;
+        transform: none;
+        width: 280px;
+        height: 280px;
+        aspect-ratio: unset;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="page-center">
-    <header class="header">
-      <img src="./assets/logos.svg" alt="Reflectiz × Infosecurity Europe" height="36">
-    </header>
+  <!-- Logo shown only on mobile (desktop logo is inside card-bg SVG) -->
+  <header class="mobile-header">
+    <img src="./assets/logos.svg" alt="Reflectiz × Infosecurity Europe">
+  </header>
 
-    <div class="composition">
-      <div class="scratch-section">
-        <div class="scratch-wrapper" id="scratchWrapper">
-          <div class="reveal-layer">
-            <span class="gift">🎁</span>
-            <span class="reveal-text">YOU WON!</span>
-          </div>
-          <canvas id="scratch-canvas"></canvas>
-        </div>
+  <div class="card-wrap">
+    <!-- Desktop: background card with logos + monster -->
+    <img class="card-bg" src="./assets/card background.svg" alt="">
+
+    <!-- Scratch card: cookie image on canvas, prize reveal underneath -->
+    <div class="scratch-zone" id="scratchZone">
+      <div class="reveal-layer">
+        <img src="assets/Coockie scratching.svg" alt="">
       </div>
-      <div class="monster-wrap">
-        <img src="./assets/monster-scratch.svg" alt="">
-      </div>
+      <canvas id="scratch-canvas"></canvas>
     </div>
-
-    <p class="scratch-hint">Scratch the cookie to reveal your prize!</p>
   </div>
 
-  <div class="transition-overlay" id="overlay"></div>
+  <div class="overlay" id="overlay"></div>
 
   <script>
-    // ── URL params (preserve prize + token through the journey) ──────────────
+    // ── URL params ─────────────────────────────────────────────────────────────
     const params = new URLSearchParams(window.location.search);
-    // Defaults for local testing
     if (!params.get('token')) params.set('token', 'test-' + Math.random().toString(36).slice(2, 10));
     if (!params.get('prize')) params.set('prize', 'duck');
 
-    // ── Canvas setup ─────────────────────────────────────────────────────────
-    const wrapper = document.getElementById('scratchWrapper');
-    const canvas  = document.getElementById('scratch-canvas');
-    const ctx     = canvas.getContext('2d');
+    // ── Canvas + cookie image ──────────────────────────────────────────────────
+    const zone   = document.getElementById('scratchZone');
+    const canvas = document.getElementById('scratch-canvas');
+    const ctx    = canvas.getContext('2d');
+    let cookieImg  = null;
+    let canvasReady = false;
 
-    function resize() {
-      const s = wrapper.offsetWidth;
+    function drawCookieToCanvas() {
+      const s = zone.offsetWidth;
+      if (!s) return;
       canvas.width  = s;
       canvas.height = s;
-      drawCookie(s);
+      if (cookieImg) {
+        ctx.drawImage(cookieImg, 0, 0, s, s);
+      }
+      canvasReady = true;
     }
 
-    function drawCookie(s) {
-      const cx = s / 2, cy = s / 2, r = s / 2;
+    // Load the Coockie.svg image onto the scratch canvas
+    const cookieSrc = new Image();
+    cookieSrc.onload = function() {
+      cookieImg = cookieSrc;
+      drawCookieToCanvas();
+    };
+    cookieSrc.onerror = function() {
+      // Fallback: draw cookie programmatically if image fails
+      drawCookieToCanvas();
+      drawFallbackCookie(canvas.width);
+    };
+    cookieSrc.src = './assets/Coockie.svg';
 
-      // Clip to circle
+    // Redraw on resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(drawCookieToCanvas, 100);
+    });
+
+    // Programmatic fallback (if SVG can't load)
+    function drawFallbackCookie(s) {
+      const cx = s / 2, cy = s / 2;
       ctx.save();
       ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.arc(cx, cy, s / 2, 0, Math.PI * 2);
       ctx.clip();
-
-      // Cookie base
-      const base = ctx.createRadialGradient(cx * 0.7, cy * 0.7, 0, cx, cy, r);
-      base.addColorStop(0,   '#f0b042');
-      base.addColorStop(0.5, '#d4791a');
-      base.addColorStop(1,   '#a85010');
-      ctx.fillStyle = base;
+      const g = ctx.createRadialGradient(cx * 0.65, cy * 0.58, 0, cx, cy, s * 0.52);
+      g.addColorStop(0, '#F5A726');
+      g.addColorStop(0.42, '#E07318');
+      g.addColorStop(1, '#B65210');
+      ctx.fillStyle = g;
       ctx.fillRect(0, 0, s, s);
-
-      // Specular highlight
-      const spec = ctx.createRadialGradient(cx * 0.55, cy * 0.45, 0, cx, cy, r * 0.9);
-      spec.addColorStop(0,   'rgba(255,230,130,0.45)');
-      spec.addColorStop(0.6, 'rgba(200,110,30,0.15)');
-      spec.addColorStop(1,   'rgba(100,40,0,0.2)');
-      ctx.fillStyle = spec;
-      ctx.fillRect(0, 0, s, s);
-
-      // Chocolate chips
-      const chips = [
-        [0.28,0.22,0.07,0.055], [0.58,0.18,0.065,0.05], [0.73,0.42,0.07,0.055],
-        [0.48,0.48,0.075,0.06], [0.22,0.58,0.065,0.05], [0.63,0.68,0.07,0.055],
-        [0.38,0.72,0.065,0.05], [0.7, 0.28,0.06, 0.048],[0.33,0.42,0.065,0.05],
-        [0.53,0.32,0.06, 0.048],[0.18,0.38,0.065,0.05], [0.78,0.58,0.07,0.055]
-      ];
-      chips.forEach(([px,py,rx,ry]) => {
-        ctx.fillStyle = '#5a2a08';
-        ctx.beginPath();
-        ctx.ellipse(px*s, py*s, rx*s, ry*s, 0.4, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = 'rgba(160,80,20,0.4)';
-        ctx.beginPath();
-        ctx.ellipse(px*s - rx*s*0.3, py*s - ry*s*0.35, rx*s*0.4, ry*s*0.38, 0.4, 0, Math.PI*2);
-        ctx.fill();
-      });
-
-      // "Scratch me" label
-      ctx.font = `bold ${s * 0.115}px 'Helvetica Neue', Arial, sans-serif`;
-      ctx.textAlign = 'center';
+      ctx.font = `900 ${s * 0.127}px 'Helvetica Neue', Arial, sans-serif`;
+      ctx.textAlign    = 'center';
       ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'rgba(0,0,0,0.4)';
-      ctx.shadowBlur = 10;
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle    = '#fff';
+      ctx.shadowColor  = 'rgba(0,0,0,0.4)';
+      ctx.shadowBlur   = 12;
       ctx.fillText('Scratch me', cx, cy);
-      ctx.shadowBlur = 0;
-
       ctx.restore();
     }
 
-    resize();
-    window.addEventListener('resize', resize);
-
-    // ── Scratch logic ─────────────────────────────────────────────────────────
-    let painting = false;
-    let redirected = false;
-    const BRUSH = () => canvas.width * 0.1;
-    const THRESHOLD = 0.60;
+    // ── Scratch logic ──────────────────────────────────────────────────────────
+    let painting       = false;
+    let redirected     = false;
+    let eraseCount     = 0;
+    let tainted        = false;
+    let lastCountedPos = null;
+    const BRUSH          = () => canvas.width * 0.10;
+    const THRESHOLD      = 0.60;
+    const ERASE_FALLBACK = 60; // ~60s brush-width steps ≈ 60–70% coverage
 
     function pos(e) {
       const rect = canvas.getBoundingClientRect();
-      const sx = canvas.width  / rect.width;
-      const sy = canvas.height / rect.height;
-      const src = e.touches ? e.touches[0] : e;
+      const sx   = canvas.width  / rect.width;
+      const sy   = canvas.height / rect.height;
+      const src  = e.touches ? e.touches[0] : e;
       return { x: (src.clientX - rect.left) * sx, y: (src.clientY - rect.top) * sy };
     }
 
@@ -264,45 +230,69 @@
       ctx.globalCompositeOperation = 'source-over';
     }
 
-    // Sample transparency ratio within circle (every 5th pixel for perf)
     function scratchedRatio() {
-      const s = canvas.width;
-      const data = ctx.getImageData(0, 0, s, s).data;
-      let inside = 0, clear = 0;
-      const step = 5;
-      for (let y = 0; y < s; y += step) {
-        for (let x = 0; x < s; x += step) {
-          const dx = x - s/2, dy = y - s/2;
-          if (dx*dx + dy*dy > (s/2)*(s/2)) continue;
-          inside++;
-          if (data[(y * s + x) * 4 + 3] < 50) clear++;
+      try {
+        const s    = canvas.width;
+        const data = ctx.getImageData(0, 0, s, s).data;
+        let inside = 0, clear = 0;
+        const step = 5;
+        for (let y = 0; y < s; y += step) {
+          for (let x = 0; x < s; x += step) {
+            const dx = x - s / 2, dy = y - s / 2;
+            if (dx * dx + dy * dy > (s / 2) * (s / 2)) continue;
+            inside++;
+            if (data[(y * s + x) * 4 + 3] < 50) clear++;
+          }
         }
+        return inside ? clear / inside : 0;
+      } catch (e) {
+        tainted = true;
+        return -1;
       }
-      return inside ? clear / inside : 0;
     }
 
     function onScratch(e) {
       if (!painting || redirected) return;
-      erase(pos(e));
-      if (scratchedRatio() >= THRESHOLD) doRedirect();
+      const p = pos(e);
+      erase(p);
+
+      // Count only once per brush-width of movement so mousemove rate doesn't matter
+      const step = BRUSH() * 0.60;
+      if (!lastCountedPos ||
+          Math.hypot(p.x - lastCountedPos.x, p.y - lastCountedPos.y) >= step) {
+        eraseCount++;
+        lastCountedPos = p;
+      }
+
+      if (tainted) {
+        if (eraseCount >= ERASE_FALLBACK) doRedirect();
+      } else {
+        const ratio = scratchedRatio();
+        if (ratio < 0) {
+          // canvas just became tainted — switch to count-based from here
+        } else if (ratio >= THRESHOLD) {
+          doRedirect();
+        }
+      }
     }
 
     function doRedirect() {
       redirected = true;
       document.getElementById('overlay').classList.add('active');
-      setTimeout(() => {
+      setTimeout(function() {
         window.location.href = 'you-won.html?' + params.toString();
       }, 600);
     }
 
-    canvas.addEventListener('mousedown', e => { painting = true; erase(pos(e)); });
-    canvas.addEventListener('mousemove', onScratch);
-    canvas.addEventListener('mouseup',   () => painting = false);
-    canvas.addEventListener('mouseleave',() => painting = false);
+    canvas.addEventListener('mousedown',  function(e) { painting = true; lastCountedPos = null; erase(pos(e)); });
+    canvas.addEventListener('mousemove',  onScratch);
+    canvas.addEventListener('mouseup',    function() { painting = false; lastCountedPos = null; });
+    canvas.addEventListener('mouseleave', function() { painting = false; lastCountedPos = null; });
 
-    canvas.addEventListener('touchstart', e => { e.preventDefault(); painting = true; erase(pos(e)); }, { passive: false });
-    canvas.addEventListener('touchmove',  e => { e.preventDefault(); onScratch(e); }, { passive: false });
-    canvas.addEventListener('touchend',   () => painting = false);
+    canvas.addEventListener('touchstart', function(e) { e.preventDefault(); painting = true; lastCountedPos = null; erase(pos(e)); }, { passive: false });
+    canvas.addEventListener('touchmove',  function(e) { e.preventDefault(); onScratch(e); },                                          { passive: false });
+    canvas.addEventListener('touchend',   function() { painting = false; lastCountedPos = null; });
   </script>
+
 </body>
 </html>
