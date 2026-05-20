@@ -301,7 +301,7 @@
           <img src="./assets/logos.svg" alt="Reflectiz × Infosecurity Europe">
         </div>
         <h1 class="won-heading">YOU WON!</h1>
-        <p class="won-sub">Get your prize!</p>
+        <p class="won-sub">But what is my prize? Fill the form to find out!</p>
 
         <div class="form-area">
           <!-- HubSpot injects here when live -->
@@ -394,7 +394,12 @@
           onFormReady: function() {
             document.getElementById('fallback-form-wrap').style.display = 'none';
             var btn = document.querySelector('#hubspot-form input[type="submit"], #hubspot-form .hs-button');
-            if (btn) btn.value = 'Claim my prize';
+            if (btn) {
+              btn.value = 'Claim my prize';
+              new MutationObserver(function() {
+                if (btn.value !== 'Claim my prize') btn.value = 'Claim my prize';
+              }).observe(btn, { attributes: true, attributeFilter: ['value'] });
+            }
           },
           onFormSubmitted: function() { goToPrizePage(); }
         });
