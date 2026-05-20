@@ -206,6 +206,30 @@
     .btn-claim:hover  { filter: brightness(1.08); }
     .btn-claim:active { transform: scale(0.98); }
 
+    /* ── Submit loader ── */
+    #form-loader {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      opacity: 0.85;
+    }
+    #form-loader.visible { display: flex; }
+    .loader-spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: #74ff9b;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* ── Privacy note ── */
     .privacy-note {
       font-size: 15px;
@@ -320,6 +344,11 @@
           </div>
         </div>
 
+        <div id="form-loader">
+          <div class="loader-spinner"></div>
+          <span>Sending your details...</span>
+        </div>
+
         <p class="privacy-note">
           Your contact details are for Reflectiz use only. <br> We will not sell, rent, or share your information with third parties
         </p>
@@ -399,6 +428,15 @@
               new MutationObserver(function() {
                 if (btn.value !== 'Claim my prize') btn.value = 'Claim my prize';
               }).observe(btn, { attributes: true, attributeFilter: ['value'] });
+              btn.addEventListener('click', function() {
+                setTimeout(function() {
+                  var errors = document.querySelectorAll('#hubspot-form .hs-error-msgs li');
+                  var hasErrors = Array.from(errors).some(function(e) { return e.offsetParent !== null; });
+                  if (!hasErrors) {
+                    document.getElementById('form-loader').classList.add('visible');
+                  }
+                }, 150);
+              });
             }
           },
           onFormSubmitted: function() { goToPrizePage(); }
