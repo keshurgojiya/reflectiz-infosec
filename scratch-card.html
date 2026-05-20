@@ -50,6 +50,8 @@
       /* 334/871 = 38.35% of card width */
       width: 38%;
       aspect-ratio: 1 / 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     /* ── Reveal layer (prize shown underneath cookie) ── */
@@ -166,11 +168,12 @@
     cookieSrc.onload = function() {
       cookieImg = cookieSrc;
       drawCookieToCanvas();
+      zone.style.opacity = '1';
     };
     cookieSrc.onerror = function() {
-      // Fallback: draw cookie programmatically if image fails
       drawCookieToCanvas();
       drawFallbackCookie(canvas.width);
+      zone.style.opacity = '1';
     };
     cookieSrc.src = './assets/Coockie.svg';
 
