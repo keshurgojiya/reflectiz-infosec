@@ -143,7 +143,9 @@
     // ── URL params ─────────────────────────────────────────────────────────────
     const params = new URLSearchParams(window.location.search);
     if (!params.get('token')) params.set('token', 'test-' + Math.random().toString(36).slice(2, 10));
-    if (!params.get('prize')) params.set('prize', 'duck');
+    const prizes = ['duck', 'socks'];
+    params.set('prize', prizes[Math.floor(Math.random() * prizes.length)]);
+    history.replaceState(null, '', '?' + params.toString());
 
     // ── Canvas + cookie image ──────────────────────────────────────────────────
     const zone   = document.getElementById('scratchZone');
