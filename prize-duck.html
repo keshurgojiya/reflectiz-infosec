@@ -248,8 +248,7 @@
   <script>
     const params     = new URLSearchParams(window.location.search);
     const token      = params.get('token') || 'demo';
-    const BASE_URL   = 'https://www.reflectiz.com/infosec2026';
-    const checkinURL = `${BASE_URL}/checkin?token=${encodeURIComponent(token)}`;
+    const checkinURL = 'https://www.reflectiz.com/events/infosec-uk-2026-2/';
     const isMobile   = window.innerWidth <= 860;
     const qrSize     = isMobile ? 240 : 130;
 
